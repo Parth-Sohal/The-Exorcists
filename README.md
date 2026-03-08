@@ -91,13 +91,12 @@ User → React Frontend → Express Backend → Security APIs → Results Dashbo
 
 ---
 
-## Installation
+## LIVE DEMO
 
-Clone the repository
+The project is deployed and accessible online.
 
-git clone https://github.com/yourusername/threatlens.git
+Live Application -> https://cersie.vercel.app/
 
-Navigate into the project folder
 
 cd threatlens
 
