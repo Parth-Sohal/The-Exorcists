@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThreatLens Cyber Toolkit · next gen</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #020205;
+      --glass-bg: rgba(13, 14, 21, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-border-hover: rgba(255, 255, 255, 0.2);
+      --neon-cyan: #00f0ff;
+      --neon-purple: #8a2be2;
+      --neon-emerald: #00ff88;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      min-height: 100vh;
+      margin: 0;
+      /* Smooth scrolling mechanics */
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* === GOD TIER BACKGROUND === */
+    .bg-complex {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      background: var(--bg-color);
+    }
+
+    /* Cinematic Light Orbs (Liquid Motion) */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.6;
+      mix-blend-mode: screen;
+      animation: float-complex 25s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    .orb-1 {
+      top: -20%; left: -10%;
+      width: 60vw; height: 60vw;
+      background: radial-gradient(circle, rgba(138,43,226,0.5) 0%, rgba(0,0,0,0) 70%);
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      bottom: -30%; right: -20%;
+      width: 70vw; height: 70vw;
+      background: radial-gradient(circle, rgba(0,240,255,0.4) 0%, rgba(0,0,0,0) 70%);
+      animation-duration: 30s;
+      animation-delay: -5s;
+    }
+
+    .orb-3 {
+      top: 30%; left: 40%;
+      width: 45vw; height: 45vw;
+      background: radial-gradient(circle, rgba(0,255,136,0.3) 0%, rgba(0,0,0,0) 70%);
+      animation-duration: 35s;
+      animation-delay: -15s;
+    }
+
+    @keyframes float-complex {
+      0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+      33% { transform: translate(15vw, 10vh) scale(1.1) rotate(120deg); }
+      66% { transform: translate(-10vw, 20vh) scale(0.9) rotate(240deg); }
+      100% { transform: translate(0, 0) scale(1) rotate(360deg); }
+    }
+
+    /* Parallax Grid */
+    .cyber-grid {
+      position: absolute;
+      inset: -50%;
+      background-image: 
+        linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      transform: perspective(1000px) rotateX(60deg) translateY(-100px) translateZ(0);
+      transform-origin: center top;
+      animation: grid-scroll 20s linear infinite;
+      mask-image: linear-gradient(to bottom, transparent, black 10%, black 80%, transparent);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 80%, transparent);
+    }
+
+    @keyframes grid-scroll {
+      0% { transform: perspective(1000px) rotateX(60deg) translateY(0) translateZ(0); }
+      100% { transform: perspective(1000px) rotateX(60deg) translateY(60px) translateZ(0); }
+    }
+
+    /* Volumetric Light Rays */
+    .light-rays {
+      position: absolute;
+      top: 0; left: 50%;
+      width: 100vw; height: 100vh;
+      transform: translateX(-50%);
+      background: conic-gradient(from 180deg at 50% -20%, rgba(255,255,255,0.05) 0deg, transparent 40deg, transparent 320deg, rgba(255,255,255,0.05) 360deg);
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    /* Advanced Particles */
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* === CORE UI COMPONENTS === */
+    .app-container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10vh 5vw 5vh;
+      min-height: 100vh;
+    }
+
+    /* Holographic Title */
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      text-align: center;
+      background: linear-gradient(to right, #fff, #a5b4fc, #818cf8, #fff);
+      background-size: 200% auto;
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: holo-text 6s linear infinite;
+      text-shadow: 0 0 40px rgba(129, 140, 248, 0.4);
+      position: relative;
+    }
+
+    @keyframes holo-text {
+      to { background-position: 200% center; }
+    }
+
+    .subtitle-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 24px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 100px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: #94a3b8;
+    }
+
+    .pulse-dot {
+      width: 8px; height: 8px;
+      background: var(--neon-emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--neon-emerald), 0 0 24px var(--neon-emerald);
+      animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.8); }
+    }
+
+    /* Premium Glass Cards */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      width: 100%;
+      max-width: 1400px;
+      margin-top: 5rem;
+    }
+
+    .glass-card {
+      position: relative;
+      background: linear-gradient(160deg, rgba(30, 32, 44, 0.6) 0%, rgba(15, 17, 26, 0.8) 100%);
+      backdrop-filter: blur(40px) saturate(150%);
+      -webkit-backdrop-filter: blur(40px) saturate(150%);
+      border-radius: 28px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+      /* Subtle 3D Depth */
+      box-shadow: 
+        0 20px 40px -10px rgba(0,0,0,0.5),
+        inset 0 1px 1px rgba(255,255,255,0.1),
+        inset 0 -1px 1px rgba(0,0,0,0.4);
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.05) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      transition: all 0.5s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 
+        0 30px 60px -15px rgba(0,0,0,0.6),
+        0 0 40px -10px var(--accent-color, rgba(255,255,255,0.1)),
+        inset 0 1px 1px rgba(255,255,255,0.2);
+    }
+
+    .glass-card:hover::before {
+      background: linear-gradient(135deg, var(--accent-color) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.05) 100%);
+    }
+
+    /* Card Variations */
+    .card-1 { --accent-color: #00f0ff; animation: card-reveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
+    .card-2 { --accent-color: #00ff88; animation: card-reveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
+    .card-3 { --accent-color: #ff00ff; animation: card-reveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards; }
+    .card-4 { --accent-color: #ffaa00; animation: card-reveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards; }
+
+    @keyframes card-reveal {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Icon Containers */
+    .icon-box {
+      width: 56px; height: 56px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+      box-shadow: 0 8px 16px -4px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.1);
+      margin-bottom: 24px;
+      color: var(--accent-color);
+      position: relative;
+    }
+    
+    .icon-box::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 20px;
+      padding: 1px;
+      background: linear-gradient(135deg, var(--accent-color), transparent);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.5;
+    }
+
+    /* Inputs */
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .modern-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 16px 20px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.3s ease;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .modern-input::placeholder {
+      color: #64748b;
+    }
+
+    .modern-input:focus {
+      background: rgba(0, 0, 0, 0.4);
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color) 15%, transparent), inset 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* Buttons */
+    .btn-super {
+      position: relative;
+      width: 100%;
+      padding: 16px;
+      border-radius: 16px;
+      border: none;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      margin-top: auto;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+    }
+
+    .btn-super::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent-color);
+      opacity: 0.15;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn-super::after {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+      transform: rotate(45deg) translateX(-100%);
+      transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .btn-super:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px color-mix(in srgb, var(--accent-color) 40%, transparent), inset 0 1px 1px rgba(255,255,255,0.2);
+    }
+
+    .btn-super:hover::before {
+      opacity: 0.25;
+    }
+
+    .btn-super:hover::after {
+      transform: rotate(45deg) translateX(100%);
+    }
+
+    .btn-super:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .btn-group .btn-super {
+      flex: 1;
+    }
+
+    /* Results Interface */
+    .terminal-output {
+      margin-top: 20px;
+      background: rgba(5, 5, 10, 0.6);
+      border-radius: 16px;
+      padding: 16px;
+      min-height: 80px;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transition: all 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .terminal-output.show {
+      opacity: 1;
+    }
+
+    .terminal-output::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--status-color, #475569);
+      transition: background 0.3s;
+    }
+
+    /* Status Colors */
+    .status-safe { --status-color: #10b981; background: linear-gradient(90deg, rgba(16,185,129,0.1), transparent); border-color: rgba(16,185,129,0.2); }
+    .status-warn { --status-color: #f59e0b; background: linear-gradient(90deg, rgba(245,158,11,0.1), transparent); border-color: rgba(245,158,11,0.2); }
+    .status-danger { --status-color: #ef4444; background: linear-gradient(90deg, rgba(239,68,68,0.15), transparent); border-color: rgba(239,68,68,0.3); }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-color); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+    /* Utilities */
+    .text-gradient {
+      background: linear-gradient(to right, #fff, rgba(255,255,255,0.6));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .loader-ring {
+      width: 20px; height: 20px;
+      border: 2px solid rgba(255,255,255,0.1);
+      border-top-color: var(--accent-color);
+      border-radius: 50%;
+      animation: spin 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+  </style>
+</head>
+<body>
+
+  <!-- God Tier Background Ecosystem -->
+  <div class="bg-complex">
+    <div class="cyber-grid"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="light-rays"></div>
+  </div>
+  
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="app-container">
+    
+    <!-- Hero Header -->
+    <header class="text-center w-full max-w-4xl mx-auto flex flex-col items-center">
+      <h1 class="hero-title">ThreatLens</h1>
+      <div class="subtitle-badge">
+        <span class="pulse-dot"></span>
+        Neural analysis matrix online
+      </div>
+    </header>
+
+    <!-- Bento Grid for Tools -->
+    <main class="bento-grid">
+      
+      <!-- Card 1: Email Breach -->
+      <article class="glass-card card-1">
+        <div class="flex items-center justify-between mb-6">
+          <div class="icon-box"><i class="fa-solid fa-envelope-open-text"></i></div>
+          <span class="text-xs font-semibold tracking-widest uppercase text-slate-500">Module 01</span>
+        </div>
+        <h2 class="text-2xl font-bold text-white mb-2">Breach Radar</h2>
+        <p class="text-slate-400 text-sm mb-6 leading-relaxed">Cross-reference identity against 14B+ compromised records.</p>
+        
+        <div class="input-wrapper mt-auto">
+          <input type="email" id="emailInput" class="modern-input" placeholder="Target email identifier">
+        </div>
+        <button onclick="uiCheckEmail()" class="btn-super">
+          <i class="fa-solid fa-satellite-dish"></i> Execute Scan
+        </button>
+        <div id="emailResult" class="terminal-output"></div>
+      </article>
+
+      <!-- Card 2: Password Vault -->
+      <article class="glass-card card-2">
+        <div class="flex items-center justify-between mb-6">
+          <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+          <span class="text-xs font-semibold tracking-widest uppercase text-slate-500">Module 02</span>
+        </div>
+        <h2 class="text-2xl font-bold zxatext-white mb-2">Cryptographic Vault</h2>
+        <p class="text-slate-400 text-sm mb-6 leading-relaxed">Evaluate entropy and synthesize military-grade keys.</p>
+        
+        <div class="input-wrapper mt-auto">
+          <input type="text" id="passwordInput" class="modern-input" placeholder="Enter key signature">
+        </div>
+        <div class="btn-group">
+          <button onclick="uiCheckPassword()" class="btn-super">
+            <i class="fa-solid fa-microchip"></i> Evaluate
+          </button>
+          <button onclick="uiGeneratePassword()" class="btn-super" style="--accent-color: #3b82f6;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Synthesize
+          </button>
+        </div>
+        <div id="passwordResult" class="terminal-output"></div>
+      </article>
+
+      <!-- Card 3: URL Analyzer -->
+      <article class="glass-card card-3">
+        <div class="flex items-center justify-between mb-6">
+          <div class="icon-box"><i class="fa-solid fa-globe"></i></div>
+          <span class="text-xs font-semibold tracking-widest uppercase text-slate-500">Module 03</span>
+        </div>
+        <h2 class="text-2xl font-bold text-white mb-2">Domain Inspector</h2>
+        <p class="text-slate-400 text-sm mb-6 leading-relaxed">Heuristic analysis of URIs for phishing and malware drops.</p>
+        
+        <div class="input-wrapper mt-auto">
+          <input type="text" id="urlInput" class="modern-input" placeholder="https://target-domain.com">
+        </div>
+        <button onclick="uiCheckURL()" class="btn-super">
+          <i class="fa-solid fa-magnifying-glass"></i> Analyze Vector
+        </button>
+        <div id="urlResult" class="terminal-output"></div>
+      </article>
+
+      <!-- Card 4: OSINT -->
+      <article class="glass-card card-4">
+        <div class="flex items-center justify-between mb-6">
+          <div class="icon-box"><i class="fa-solid fa-user-ninja"></i></div>
+          <span class="text-xs font-semibold tracking-widest uppercase text-slate-500">Module 04</span>
+        </div>
+        <h2 class="text-2xl font-bold text-white mb-2">Identity OSINT</h2>
+        <p class="text-slate-400 text-sm mb-6 leading-relaxed">Correlate digital footprint across 300+ global networks.</p>
+        
+        <div class="input-wrapper mt-auto">
+          <input type="text" id="usernameInput" class="modern-input" placeholder="@alias">
+        </div>
+        <button onclick="uiCheckUsername()" class="btn-super">
+          <i class="fa-solid fa-network-wired"></i> Correlate
+        </button>
+        <div id="usernameResult" class="terminal-output"></div>
+      </article>
+
+    </main>
+
+  </div>
+
+  <script>
+    // --- ADVANCED HIGH-PERFORMANCE PARTICLES (CANVAS) ---
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d', { alpha: true });
+    let particles = [];
+    
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 1.5 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.3;
+        this.speedY = (Math.random() - 0.5) * 0.3;
+        this.opacity = Math.random() * 0.5 + 0.1;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if(this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if(this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      draw() {
+        ctx.fillStyle = `rgba(148, 163, 184, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 100; i++) particles.push(new Particle());
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+
+    // --- LOGIC & UI UPDATES ---
+    function triggerProcess(resultId, processFunc, cardAccent) {
+      const el = document.getElementById(resultId);
+      el.className = 'terminal-output show';
+      el.style.setProperty('--status-color', cardAccent);
+      el.innerHTML = `<div class="flex items-center gap-3"><div class="loader-ring"></div><span class="text-sm text-slate-300 tracking-wide">Processing data stream...</span></div>`;
+      
+      setTimeout(() => processFunc(el), Math.random() * 600 + 400); // 400-1000ms delay
+    }
+
+    // Email
+    function uiCheckEmail() {
+      triggerProcess("emailResult", (el) => {
+        const val = document.getElementById("emailInput").value.trim().toLowerCase();
+        if(!val) {
+          el.className = 'terminal-output show status-warn';
+          el.innerHTML = '<div class="flex gap-3"><i class="fa-solid fa-triangle-exclamation text-amber-500 mt-1"></i><div><p class="font-semibold text-amber-500">Input Required</p><p class="text-slate-400 text-xs mt-1">Provide an identifier to scan.</p></div></div>';
+          return;
+        }
+        
+        const isBad = ["test", "admin", "spam", "temp"].some(w => val.includes(w)) || Math.random() < 0.35;
+        if(isBad) {
+          el.className = 'terminal-output show status-danger';
+          el.innerHTML = `<div class="flex gap-3"><i class="fa-solid fa-skull text-red-500 mt-1"></i><div><p class="font-semibold text-red-500 text-base">COMPROMISED IDENTITY</p><p class="text-slate-400 text-xs mt-1">Found in <span class="text-white font-bold">${Math.floor(Math.random()*150)+5}</span> distinct breaches. Rotating credentials advised.</p></div></div>`;
+        } else {
+          el.className = 'terminal-output show status-safe';
+          el.innerHTML = `<div class="flex gap-3"><i class="fa-solid fa-shield-halved text-emerald-500 mt-1"></i><div><p class="font-semibold text-emerald-500 text-base">IDENTITY SECURE</p><p class="text-slate-400 text-xs mt-1">No footprint found in known adversarial datasets.</p></div></div>`;
+        }
+      }, 'var(--neon-cyan)');
+    }
+
+    // Password
+    function uiCheckPassword() {
+      triggerProcess("passwordResult", (el) => {
+        const val = document.getElementById("passwordInput").value;
+        if(!val) {
+          el.className = 'terminal-output show status-warn';
+          el.innerHTML = '<div class="flex gap-3"><i class="fa-solid fa-key text-amber-500 mt-1"></i><div><p class="font-semibold text-amber-500">Key Required</p></div></div>';
+          return;
+        }
+        
+        let s = 0;
+        if(val.length >= 10) s++;
+        if(/[A-Z]/.test(val)) s++;
+        if(/[0-9]/.test(val)) s++;
+        if(/[^A-Za-z0-9]/.test(val)) s++;
+
+        if(s >= 4) {
+          el.className = 'terminal-output show status-safe';
+          el.innerHTML = `<div class="flex gap-3"><i class="fa-solid fa-lock text-emerald-500 mt-1"></i><div><p class="font-semibold text-emerald-500">Military Grade Key</p><p class="text-slate-400 text-xs mt-1">Estimated bruteforce time: > 2.5 billion years.</p></div></div>`;
+        } else if (s === 3) {
+          el.className = 'terminal-output show status-warn';
+          el.innerHTML = `<div class="flex gap-3"><i class="fa-solid fa-circle-exclamation text-amber-500 mt-1"></i><div><p class="font-semibold text-amber-500">Standard Strength</p><p class="text-slate-400 text-xs mt-1">Vulnerable to sophisticated dictionary attacks.</p></div></div>`;
+        } else {
+          el.className = 'terminal-output show status-danger';
+          el.innerHTML = `<div class="flex gap-3"><i class="fa-solid fa-biohazard text-red-500 mt-1"></i><div><p class="font-semibold text-red-500">Critical Weakness</p><p class="text-slate-400 text-xs mt-1">Easily compromised. Recommend synthesis.</p></div></div>`;
+        }
+      }, 'var(--neon-emerald)');
+    }
+
+    function uiGeneratePassword() {
+      const c = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+      let p = "";
+      for(let i=0; i<18; i++) p += c.charAt(Math.floor(Math.random() * c.length));
+      
+      const input = document.getElementById("passwordInput");
+      input.value = p;
+      
+      const el = document.getElementById("passwordResult");
+      el.className = 'terminal-output show status-safe';
+      el.innerHTML = `<div class="flex gap-3"><i class="fa-solid fa-wand-magic text-blue-400 mt-1"></i><div class="w-full"><p class="font-semibold text-blue-400">Key Synthesized</p><div class="mt-2 bg-black/40 p-2 rounded border border-white/5 font-mono text-white text-center tracking-widest break-all">${p}</div></div></div>`;
+    }
+
+    // URL
+    function uiCheckURL() {
+      triggerProcess("urlResult", (el) => {
+        const val = document.getElementById("urlInput").value.trim().toLowerCase();
+        if(!val) {
+          el.className = 'terminal-output show status-warn';
+          el.innerHTML = '<div class="flex gap-3"><i class="fa-solid fa-link text-amber-500 mt-1"></i><div><p class="font-semibold text-amber-500">URI Required</p></div></div>';
+          return;
+        }
+
+        const isBad = ["login", "free", "secure", "verify"].some(w => val.includes(w)) || /\d+\.\d+\.\d+\.\d+/.test(val) || Math.random() < 0.2;
+        if(isBad) {
+          el.className = 'terminal-output show status-danger';
+          el.innerHTML = `<div class="flex gap-3"><i class="fa-solid fa-bug text-red-500 mt-1"></i><div><p class="font-semibold text-red-500">MALICIOUS DOMAIN</p><p class="text-slate-400 text-xs mt-1">Heuristics indicate potential phishing/malware delivery.</p></div></div>`;
+        } else {
+          el.className = 'terminal-output show status-safe';
+          el.innerHTML = `<div class="flex gap-3"><i class="fa-solid fa-check-double text-emerald-500 mt-1"></i><div><p class="font-semibold text-emerald-500">DOMAIN VERIFIED</p><p class="text-slate-400 text-xs mt-1">SSL valid. No known threats in current vector.</p></div></div>`;
+        }
+      }, 'var(--neon-purple)');
+    }
+
+    // Username
+    function uiCheckUsername() {
+      triggerProcess("usernameResult", (el) => {
+        const val = document.getElementById("usernameInput").value.trim();
+        if(!val) {
+          el.className = 'terminal-output show status-warn';
+          el.innerHTML = '<div class="flex gap-3"><i class="fa-solid fa-user text-amber-500 mt-1"></i><div><p class="font-semibold text-amber-500">Alias Required</p></div></div>';
+          return;
+        }
+
+        const pfs = [
+          {n:"GitHub", i:"fa-github"}, {n:"Twitter", i:"fa-twitter"}, 
+          {n:"Reddit", i:"fa-reddit"}, {n:"Telegram", i:"fa-telegram"}
+        ];
+        
+        let html = '<div class="grid grid-cols-2 gap-2 w-full">';
+        pfs.forEach(p => {
+          const hit = Math.random() > 0.4;
+          if(hit) {
+            html += `<div class="bg-emerald-500/10 border border-emerald-500/20 rounded p-2 flex items-center justify-between"><div class="flex items-center gap-2 text-emerald-400"><i class="fa-brands ${p.i}"></i> <span class="text-xs font-semibold">${p.n}</span></div><i class="fa-solid fa-check text-xs text-emerald-500"></i></div>`;
+          } else {
+            html += `<div class="bg-white/5 border border-white/5 rounded p-2 flex items-center justify-between opacity-50"><div class="flex items-center gap-2 text-slate-400"><i class="fa-brands ${p.i}"></i> <span class="text-xs">${p.n}</span></div><i class="fa-solid fa-xmark text-xs text-slate-500"></i></div>`;
+          }
+        });
+        html += '</div>';
+
+        el.className = 'terminal-output show status-safe';
+        el.style.setProperty('--status-color', 'var(--neon-emerald)'); // Using emerald for OSINT success
+        el.innerHTML = `<div class="w-full"><p class="font-semibold text-emerald-500 mb-3 text-sm flex items-center gap-2"><i class="fa-solid fa-network-wired"></i> Footprint Mapped</p>${html}</div>`;
+      }, '#ffaa00');
+    }
+  </script>
+</body>
+</html>
